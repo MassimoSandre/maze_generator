@@ -16,7 +16,7 @@ pygame.font.init()
 
 running = True
 
-MAZE_SIZE = (12,12)
+MAZE_SIZE = (20,20)
 CELL_SIZE = 40
 
 m = Maze(MAZE_SIZE)

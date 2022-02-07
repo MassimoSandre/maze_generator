@@ -29,21 +29,18 @@ class Maze:
 
 
     def generate_new(self):
-        done = []
+        #done = []
+        todo = []
         doors = []
         links = []
         for i in range(self.dim[0]):
             links.append([])
             for j in range(self.dim[1]):
                 links[i].append([])
-        while len(done) < self.dim[0]*self.dim[1]:
-            x = random.randint(0,self.dim[0]-1)
-            y = random.randint(0,self.dim[1]-1)
-            while (x,y) in done:
-                x = random.randint(0,self.dim[0]-1)
-                y = random.randint(0,self.dim[1]-1)
+                todo.append((i,j))
 
-            
+        while len(todo) > 0:
+            x,y = random.choice(todo)
             
             w = []
             if x-1>=0:
@@ -60,9 +57,6 @@ class Maze:
                     w.append((x, y, x, y+1))
             
 
-            
-                
-
             random.shuffle(w)
 
             n_linked = 0
@@ -77,7 +71,7 @@ class Maze:
                     
 
             if n_linked <= 1:
-                done.append((x,y))
+                todo.remove((x,y))
 
         self.doors = doors
 
