@@ -3,10 +3,12 @@ from maze import Maze
 class Maze_Solver():
     def __init__(self, maze):
         self.maze = maze
-        self.__solve()
+        self.solve()
 
-    def __solve(self):
-        queue = [(0,0,0)]
+    def solve(self, start=(0,0), end=(-1,-1)):
+        if end == (-1,-1):
+            end = (self.maze.dim[0]-1, self.maze.dim[1]-1)
+        queue = [(start[0],start[1],0)]
 
         dist = [[-1 for _ in range(self.maze.dim[1])]for _ in range(self.maze.dim[0])]
 
@@ -25,10 +27,14 @@ class Maze_Solver():
                 if (x[0], x[1]-1, x[0], x[1]) in self.maze.doors and x[1]-1 >= 0:
                     queue.append((x[0],x[1]-1, x[2]+1))
 
-        self.__solution = [(-1,0),(self.maze.dim[0]-1, self.maze.dim[1]-1),(self.maze.dim[0]-1, self.maze.dim[1])]
+        self.__solution = [end]
+        if end == (0,0) or start == (0,0):
+            self.__solution.append((-1,0))
+        if end == (self.maze.dim[0]-1, self.maze.dim[1]-1) or start == (self.maze.dim[0]-1, self.maze.dim[1]-1):
+            self.__solution.append((self.maze.dim[0]-1, self.maze.dim[1]))
 
-        d = dist[self.maze.dim[0]-1][self.maze.dim[1]-1]
-        current = (self.maze.dim[0]-1, self.maze.dim[1]-1)
+        d = dist[end[0]][end[1]]
+        current = (end[0], end[1])
         while d > 0:
             x,y = current
             if x+1 < self.maze.dim[0] and dist[x+1][y] == d-1 and (x,y,x+1,y) in self.maze.doors:
