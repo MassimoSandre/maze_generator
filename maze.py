@@ -14,43 +14,37 @@ class Maze:
         self.generate_new()
 
     def generate_new(self):
-        visited = [[False for _ in range(self.dim[0])] for _ in range(self.dim[1])]
+        visited = [[False for _ in range(self.dim[1])] for _ in range(self.dim[0])]
         self.doors = []
+        to_check = [const.UP, const.LEFT, const.DOWN, const.RIGHT]
 
-        def dfs(x,y):
-            visited[x][y] = True
-            to_check = []
-            if x > 0:
-                to_check.append(const.LEFT)
-            if x < self.dim[0]-1:
-                to_check.append(const.RIGHT)
-            if y > 0:
-                to_check.append(const.UP)
-            if y < self.dim[1]-1:
-                to_check.append(const.DOWN)
-            
-            random.shuffle(to_check)
+        stack = [(-1,-1, 0,0)]
 
-            for i in to_check:
-                match i:
-                    case const.UP:
-                        if not visited[x][y-1]:
-                            self.doors.append((x,y-1,x,y))
-                            dfs(x,y-1)
+        while len(stack) > 0:
+            px,py, x,y = stack.pop()
 
-                    case const.LEFT:
-                        if not visited[x-1][y]:
-                            self.doors.append((x-1,y,x,y))
-                            dfs(x-1,y)
+            if not visited[x][y]:
+                if px != -1 and py != -1:
+                    self.doors.append((min(px,x), min(py,y), max(px,x), max(py, y)))
+                visited[x][y] = True
+                
+                random.shuffle(to_check)
+                
 
-                    case const.DOWN:
-                        if not visited[x][y+1]:
-                            self.doors.append((x,y,x,y+1))
-                            dfs(x,y+1)
-                        
-                    case const.RIGHT:
-                        if not visited[x+1][y]:
-                            self.doors.append((x,y,x+1,y))
-                            dfs(x+1,y)
+                for i in to_check:
+                    match i:
+                        case const.UP:
+                            if y > 0 and not visited[x][y-1]:
+                                stack.append((x,y,x,y-1))
 
-        dfs(0,0)
+                        case const.LEFT:
+                            if x > 0 and not visited[x-1][y]:
+                                stack.append((x,y,x-1,y))
+
+                        case const.DOWN:
+                            if y < self.dim[1]-1 and not visited[x][y+1]:
+                                stack.append((x,y,x,y+1))
+                            
+                        case const.RIGHT:
+                            if x < self.dim[0]-1 and not visited[x+1][y]:
+                                stack.append((x,y,x+1,y))

@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-import random
 from maze import Maze
 from maze_solver import Maze_Solver
 import time
@@ -15,13 +14,10 @@ screen = pygame.display.set_mode(size)
 
 clock = pygame.time.Clock()
 
-pygame.font.init()
-
-font = pygame.font.SysFont('arial', 20)
 
 running = True
 
-MAZE_SIZE = (50,50)
+MAZE_SIZE = (10,20)
 CELL_SIZE = min((width-2*margin)//MAZE_SIZE[0], (height-2*margin)//MAZE_SIZE[1])
 
 
