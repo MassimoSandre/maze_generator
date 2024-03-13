@@ -3,8 +3,10 @@ from pygame.locals import *
 import random
 from maze import Maze
 from maze_solver import Maze_Solver
+import time
 
 size = width, height = 800, 800
+margin = 100
 
 bgcolor = 0,0,0
 white = 255,255,255
@@ -19,14 +21,23 @@ font = pygame.font.SysFont('arial', 20)
 
 running = True
 
-MAZE_SIZE = (16,16)
-CELL_SIZE = 40
+MAZE_SIZE = (50,50)
+CELL_SIZE = min((width-2*margin)//MAZE_SIZE[0], (height-2*margin)//MAZE_SIZE[1])
 
+
+
+start = time.time()
 m = Maze(MAZE_SIZE)
+end = time.time()
+
+time_elapsed = end-start
+
+print(str(MAZE_SIZE[0])+"x" + str(MAZE_SIZE[1]) + " Maze generated in " + str(time_elapsed))
+
 solver = Maze_Solver(m)
 sol = []
 
-bx, by  = (80,80)
+bx, by  = ((width-CELL_SIZE*MAZE_SIZE[0])//2,(height-CELL_SIZE*MAZE_SIZE[1])//2)
 
 start = None
 end = None
